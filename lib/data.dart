@@ -1,3 +1,6 @@
+import 'package:locket/models/post.dart';
+import 'package:locket/models/user.dart';
+
 const Map<String, String> imageUrls = {
   'Giang': 'https://images.unsplash.com/photo-1719937051230-8798ae2ebe86?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   'SonC': 'https://images.unsplash.com/photo-1726250864867-ad1dabb63c58?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -12,6 +15,27 @@ Map<String, String> messages = {
   'Hoang': 'my wife',
   'MAH': 'No Gay',
 
-
   // Add more messages for other names as needed
 };
+
+User giang = User(
+  id: 1,
+  firstName: 'Giang',
+  lastName: 'Nguyen',
+  phoneNumber: '0123456789',
+  email: 'giang@gmail.com',
+  address: 'Nghe An, Vietnam',
+  password: '123',
+  isActive: true,
+  statusName: 'VERIFIED',
+  dateOfBirth: '2004-01-01',
+  avatarUrl: imageUrls['Giang'],
+  roleName: 'USER',
+  posts: List<Post>.empty(),
+);
+
+Post post = Post(
+    userId: 1,
+    title: 'ước được ai đó tặng',
+    image: 'https://images.unsplash.com/photo-1719937051230-8798ae2ebe86?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+);

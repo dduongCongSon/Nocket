@@ -3,36 +3,39 @@ import 'package:flutter/material.dart';
 import 'data.dart'; // Ensure this file contains the imageUrls Map and messages Map
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: SafeArea(
-      child: MyHomePage(), // Sử dụng MyHomePage ở đây
+      child: MyHomePage(), // Use MyHomePage here
     ),
   ));
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String selectedName = 'Giang'; // Tên mặc định
-  late String selectedImageUrl; // Khai báo biến URL
-  late String selectedMessage; // Khai báo biến cho thông điệp
-  List<String> names = []; // Danh sách tên
+  String selectedName = 'Hoang'; // Default name
+  late String selectedImageUrl; // Declare URL variable
+  late String selectedMessage; // Declare message variable
+  List<String> names = []; // List of names
 
   @override
   void initState() {
     super.initState();
-    // Khởi tạo names, selectedImageUrl và selectedMessage từ imageUrls
-    names = imageUrls.keys.toList(); // Danh sách tên
-    selectedImageUrl = imageUrls[selectedName]!; // URL tương ứng
-    selectedMessage = messages[selectedName]!; // Thông điệp tương ứng
+    // Initialize names, selectedImageUrl, and selectedMessage from imageUrls
+    names = imageUrls.keys.toList(); // List of names
+    selectedImageUrl = imageUrls[selectedName]!; // Corresponding URL
+    selectedMessage = messages[selectedName]!; // Corresponding message
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF121212),
       body: Stack(
         children: [
           Positioned.fill(
@@ -40,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
                 child: Container(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withValues(),
                 ),
               ),
             ),
@@ -48,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Column(
             children: [
               Container(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -57,62 +60,77 @@ class _MyHomePageState extends State<MyHomePage> {
                       items: names.map((String name) {
                         return DropdownMenuItem<String>(
                           value: name,
-                          child: Text(name, style: TextStyle(color: Colors.white)),
+                          child: Text(name, style: const TextStyle(color: Colors.white)),
                         );
                       }).toList(),
                       onChanged: (String? newValue) {
                         setState(() {
                           selectedName = newValue!;
-                          selectedImageUrl = imageUrls[selectedName]!; // Cập nhật URL tương ứng
-                          selectedMessage = messages[selectedName]!; // Cập nhật thông điệp tương ứng
+                          selectedImageUrl = imageUrls[selectedName]!; // Update corresponding URL
+                          selectedMessage = messages[selectedName]!; // Update corresponding message
                         });
                       },
                       dropdownColor: Colors.grey[800],
                     ),
-                    Icon(Icons.notifications, color: Colors.white),
+                    const Icon(Icons.notifications, color: Colors.white),
                   ],
                 ),
               ),
               Expanded(
                 child: Center(
                   child: Container(
-                    padding: EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[800],
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
+                    padding: EdgeInsets.zero,
+                    child: Stack(
                       children: [
                         AspectRatio(
                           aspectRatio: 1,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: Image.network(
-                              selectedImageUrl, // Hiển thị URL tương ứng
+                              selectedImageUrl, // Display corresponding URL
                               fit: BoxFit.cover,
                             ),
                           ),
                         ),
-                        SizedBox(height: 10),
-                        Text(
-                          selectedMessage, // Hiển thị thông điệp tương ứng
-                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        const SizedBox(height: 10),
+                        Positioned(
+                          bottom: 10, // Margin at the bottom
+                          left: 0,
+                          right: 0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                selectedMessage, // Display corresponding message
+                                style: const TextStyle(color: Colors.white, fontSize: 18),
+                              ),
+
+                            ],
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ),
               ),
+              Text(
+                selectedName, // Display corresponding name outside the image
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                margin: const EdgeInsets.only(bottom: 16),
                 child: Row(
                   children: [
                     Expanded(
                       child: TextField(
                         decoration: InputDecoration(
                           hintText: 'Send message...',
-                          hintStyle: TextStyle(color: Colors.white54),
+                          hintStyle: const TextStyle(color: Colors.white54),
                           filled: true,
                           fillColor: Colors.grey[700],
                           border: OutlineInputBorder(
@@ -123,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.send, color: Colors.yellow),
+                      icon: const Icon(Icons.send, color: Colors.yellow),
                       onPressed: () {},
                     ),
                   ],
