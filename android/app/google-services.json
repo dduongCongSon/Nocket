@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "261946660163",
+    "firebase_url": "https://nodejs-demo-5f3ba-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "nodejs-demo-5f3ba",
+    "storage_bucket": "nodejs-demo-5f3ba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:261946660163:android:6199b417266fc0a3408bf6",
+        "android_client_info": {
+          "package_name": "com.example.locket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "261946660163-hmj7uo9cor2pqf749o1r9u2m506ksa20.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAk6CIJ6hRGrMyyOXKAcTCYHvb2E0MStQg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "261946660163-hmj7uo9cor2pqf749o1r9u2m506ksa20.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

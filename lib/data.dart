@@ -1,5 +1,6 @@
 import 'package:locket/models/post.dart';
 import 'package:locket/models/user.dart';
+import 'package:locket/responses/user_login.dart';
 
 const Map<String, String> imageUrls = {
   'Giang': 'https://images.unsplash.com/photo-1719937051230-8798ae2ebe86?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -38,4 +39,28 @@ Post post = Post(
     userId: 1,
     title: 'ước được ai đó tặng',
     image: 'https://images.unsplash.com/photo-1719937051230-8798ae2ebe86?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+);
+
+/*
+{
+	"tokenType": "Bearer",
+	"id": 27,
+	"username": "isa@gmail.com",
+	"roles": [
+		"ROLE_BREEDER"
+	],
+	"message": "Login successfully",
+	"token": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjI3LCJlbWFpbCI6ImlzYUBnbWFpbC5jb20iLCJzdWIiOiJpc2FAZ21haWwuY29tIiwiZXhwIjoxNzM0Mjc0OTg3fQ.1of70QCz2YV3lQYxQPyMk_168gTmalLCcR0rN0X73Qw",
+	"refresh_token": "b80352cb-d883-4c06-bbef-f15672fd79d3"
+}
+*/
+
+UserLoginResponse userLoginResponse = UserLoginResponse(
+  tokenType: 'Bearer',
+  id: 27,
+  username: 'hoang@',
+  roles: ['ROLE_USER'],
+  message: 'Login successfully',
+  token: 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjI3LCJlbWFpbCI6ImlzYUBnbWFpbC5jb20iLCJzdWIiOiJpc2FAZ21haWwuY29tIiwiZXhwIjoxNzM0Mjc0OTg3fQ.1of70QCz2YV3lQYxQPyMk_168gTmalLCcR0rN0X73Qw',
+  refreshToken: 'b80352cb-d883-4c06-bbef-f15672fd79d3'
 );

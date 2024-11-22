@@ -1,155 +1,81 @@
-import 'dart:ui';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'data.dart'; // Ensure this file contains the imageUrls Map and messages Map
+import 'package:locket/core/provider_setup.dart';
+import 'package:locket/responsive/mobile_screen_layout.dart';
+import 'package:locket/responsive/responsive_layout.dart';
+import 'package:locket/responsive/web_screen_layout.dart';
+import 'package:locket/screens/login_screen.dart';
+import 'package:locket/utils/colors.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MaterialApp(
-    home: SafeArea(
-      child: MyHomePage(), // Use MyHomePage here
-    ),
-  ));
-}
+void main() async {
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  WidgetsFlutterBinding.ensureInitialized();
 
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  String selectedName = 'Hoang'; // Default name
-  late String selectedImageUrl; // Declare URL variable
-  late String selectedMessage; // Declare message variable
-  List<String> names = []; // List of names
-
-  @override
-  void initState() {
-    super.initState();
-    // Initialize names, selectedImageUrl, and selectedMessage from imageUrls
-    names = imageUrls.keys.toList(); // List of names
-    selectedImageUrl = imageUrls[selectedName]!; // Corresponding URL
-    selectedMessage = messages[selectedName]!; // Corresponding message
+  // initialise app based on platform- web or mobile
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+          apiKey: "AIzaSyCruOqr6Bs9YT_JqqrFFr56TUJTiXezRGg",
+          appId: "1:261946660163:web:c8e32e5f1fd826d7408bf6",
+          messagingSenderId: "261946660163",
+          projectId: "nodejs-demo-5f3ba",
+          storageBucket: 'nodejs-demo-5f3ba.appspot.com'
+      ),
+    );
+  } else {
+    await Firebase.initializeApp();
   }
+
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF121212),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: ClipRect(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                child: Container(
-                  color: Colors.black.withValues(),
-                ),
-              ),
-            ),
-          ),
-          Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    DropdownButton<String>(
-                      value: selectedName,
-                      items: names.map((String name) {
-                        return DropdownMenuItem<String>(
-                          value: name,
-                          child: Text(name, style: const TextStyle(color: Colors.white)),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedName = newValue!;
-                          selectedImageUrl = imageUrls[selectedName]!; // Update corresponding URL
-                          selectedMessage = messages[selectedName]!; // Update corresponding message
-                        });
-                      },
-                      dropdownColor: Colors.grey[800],
-                    ),
-                    const Icon(Icons.notifications, color: Colors.white),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Center(
-                  child: Container(
-                    padding: EdgeInsets.zero,
-                    child: Stack(
-                      children: [
-                        AspectRatio(
-                          aspectRatio: 1,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.network(
-                              selectedImageUrl, // Display corresponding URL
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Positioned(
-                          bottom: 10, // Margin at the bottom
-                          left: 0,
-                          right: 0,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                selectedMessage, // Display corresponding message
-                                style: const TextStyle(color: Colors.white, fontSize: 18),
-                              ),
+    return MultiProvider(
+      providers:  providers,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Auction Koi',
+        theme: ThemeData.light().copyWith(
+          scaffoldBackgroundColor: mobileBackgroundColor,
+        ),
+        routes: {
+          '/login': (context) => const LoginScreen(),
+        },
+        home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.active) {
+              // Checking if the snapshot has any data or not
+              if (snapshot.hasData) {
+                // if snapshot has data which means user is logged in then we check the width of screen and accordingly display the screen layout
+                return const ResponsiveLayout(
+                  mobileScreenLayout: MobileScreenLayout(),
+                  webScreenLayout: WebScreenLayout(),
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text('${snapshot.error}'),
+                );
+              }
+            }
 
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Text(
-                selectedName, // Display corresponding name outside the image
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                margin: const EdgeInsets.only(bottom: 16),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Send message...',
-                          hintStyle: const TextStyle(color: Colors.white54),
-                          filled: true,
-                          fillColor: Colors.grey[700],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.send, color: Colors.yellow),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
+            // means connection to future hasnt been made yet
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            return const LoginScreen();//starting screen
+          },
+        ),
       ),
     );
   }
