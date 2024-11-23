@@ -5,6 +5,7 @@ class User extends BaseEntity {
   final int id;
   final String firstName;
   final String lastName;
+  final String nickname;
   final String? phoneNumber;
   final String email;
   final String address;
@@ -20,6 +21,7 @@ class User extends BaseEntity {
     required this.id,
     required this.firstName,
     required this.lastName,
+    required this.nickname,
     this.phoneNumber,
     required this.email,
     required this.address,
@@ -40,6 +42,7 @@ class User extends BaseEntity {
       id: json['id'],
       firstName: json['first_name'],
       lastName: json['last_name'],
+      nickname: json['nickname'],
       phoneNumber: json['phone_number'],
       email: json['email'],
       address: json['address'],

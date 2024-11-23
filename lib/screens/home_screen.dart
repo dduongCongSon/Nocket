@@ -1,7 +1,8 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:locket/data.dart';
+import 'package:locket/models/user.dart';
+import 'package:locket/utils/colors.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -11,19 +12,135 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String selectedName = 'Hoang'; // Default name
-  late List<String> selectedImageUrls; // List of image URLs
-  late String selectedMessage; // Declare message variable
-  List<String> names = []; // List of names
-  int currentIndex = 0; // Track current image index for PageView
+  late User selectedUser;
+  List<User> users = [];
+  int currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    // Initialize names, selectedImageUrls, and selectedMessage
-    names = imageUrls.keys.toList(); // List of names
-    selectedImageUrls = imageUrls[selectedName]!; // List of corresponding URLs
-    selectedMessage = messages[selectedName]!; // Corresponding message
+    User everyoneUser = User(
+        id: -1,
+        firstName: '',
+        lastName: '',
+        nickname: 'Everyone',
+        email: '',
+        address: '',
+        password: '',
+        isActive: false,
+        dateOfBirth: '',
+        avatarUrl: null,
+        roleName: '',
+        posts: []);
+    users = [everyoneUser, hoang, son];
+    selectedUser = users.first;
+  }
+
+  Widget buildGridView() {
+    final allPosts = users
+        .where((user) => user.id != -1)
+        .expand((user) => user.posts)
+        .toList();
+
+    return AnimatedOpacity(
+      opacity: 1.0,
+      duration: const Duration(milliseconds: 300),
+      child: GridView.builder(
+        padding: const EdgeInsets.all(10),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+        ),
+        itemCount: allPosts.length,
+        itemBuilder: (context, index) {
+          return Hero(
+            tag: 'image_${allPosts[index].image}',
+            child: Material(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Container(
+                  color: mobileBackGroundColorDark,
+                  // Set the background color to black
+                  child: Image.network(
+                    allPosts[index].image,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget buildPageView() {
+    return AnimatedOpacity(
+      opacity: 1.0,
+      duration: const Duration(milliseconds: 300),
+      child: Stack(
+        children: [
+          AspectRatio(
+            aspectRatio: 1,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: PageView.builder(
+                scrollDirection: Axis.vertical,
+                onPageChanged: (index) {
+                  setState(() {
+                    currentIndex = index;
+                  });
+                },
+                itemCount: selectedUser.posts.length,
+                itemBuilder: (context, index) {
+                  return Hero(
+                    tag: 'image_${selectedUser.posts[index].image}',
+                    child: FractionallySizedBox(
+                      heightFactor: 0.75,
+                      // Set the height to 75% of the original size
+                      child: Image.network(
+                        selectedUser.posts[index].image,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          if (selectedUser.posts.isNotEmpty)
+            Positioned(
+              bottom: 10,
+              left: 0,
+              right: 0,
+              child: AnimatedOpacity(
+                opacity: 1.0,
+                duration: const Duration(milliseconds: 300),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      selectedUser.posts[currentIndex].title,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        shadows: [
+                          Shadow(
+                            offset: Offset(0, 1),
+                            blurRadius: 3.0,
+                            color: Color.fromARGB(255, 0, 0, 0),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -46,24 +163,48 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Container(
                 padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.only(top: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    DropdownButton<String>(
-                      value: selectedName,
-                      items: names.map((String name) {
-                        return DropdownMenuItem<String>(
-                          value: name,
-                          child: Text(name, style: const TextStyle(color: Colors.white)),
+                    CircleAvatar(
+                      backgroundImage: selectedUser.avatarUrl != null
+                          ? NetworkImage(selectedUser.avatarUrl!)
+                          : null,
+                      child: selectedUser.avatarUrl == null
+                          ? const Icon(Icons.account_circle,
+                              color: Colors.white)
+                          : null,
+                    ),
+                    DropdownButton<User>(
+                      value: selectedUser,
+                      items: users.map((User user) {
+                        return DropdownMenuItem<User>(
+                          value: user,
+                          child: Row(
+                            children: [
+                              if (user.avatarUrl != null)
+                                CircleAvatar(
+                                  backgroundImage: user.avatarUrl != null
+                                      ? NetworkImage(user.avatarUrl!)
+                                      : null,
+                                ),
+                              const SizedBox(width: 10),
+                              Text(
+                                user.nickname,
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
                         );
                       }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedName = newValue!;
-                          selectedImageUrls = imageUrls[selectedName]!; // Update list of URLs
-                          selectedMessage = messages[selectedName]!; // Update corresponding message
-                          currentIndex = 0; // Reset index when switching users
-                        });
+                      onChanged: (User? newUser) {
+                        if (newUser != null) {
+                          setState(() {
+                            selectedUser = newUser;
+                            currentIndex = 0;
+                          });
+                        }
                       },
                       dropdownColor: Colors.grey[800],
                     ),
@@ -75,83 +216,101 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Center(
                   child: Container(
                     padding: EdgeInsets.zero,
-                    child: Stack(
-                      children: [
-                        AspectRatio(
-                          aspectRatio: 1,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: PageView.builder(
-                              scrollDirection: Axis.vertical,
-                              onPageChanged: (index) {
-                                setState(() {
-                                  currentIndex = index; // Update the index on page change
-                                });
-                              },
-                              itemCount: selectedImageUrls.length, // Number of images
-                              itemBuilder: (context, index) {
-                                return Image.network(
-                                  selectedImageUrls[index], // Display corresponding image URL
-                                  fit: BoxFit.cover,
-                                );
-                              },
-                            ),
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 500),
+                      transitionBuilder:
+                          (Widget child, Animation<double> animation) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: ScaleTransition(
+                            scale: animation,
+                            child: child,
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        Positioned(
-                          bottom: 10,
-                          left: 0,
-                          right: 0,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                selectedMessage, // Display corresponding message
-                                style: const TextStyle(color: Colors.white, fontSize: 18),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                        );
+                      },
+                      child: selectedUser.id == -1
+                          ? buildGridView()
+                          : buildPageView(),
                     ),
                   ),
                 ),
               ),
-              Text(
-                selectedName, // Display corresponding name outside the image
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+              if (selectedUser.id != -1)
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: Text(
+                    selectedUser.firstName,
+                    key: ValueKey<String>(selectedUser.firstName),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                margin: const EdgeInsets.only(bottom: 16),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Send message...',
-                          hintStyle: const TextStyle(color: Colors.white54),
-                          filled: true,
-                          fillColor: Colors.grey[700],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            borderSide: BorderSide.none,
+              if (selectedUser.id != -1)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              style: const TextStyle(color: Colors.white),
+                              decoration: InputDecoration(
+                                hintText: 'Send message...',
+                                hintStyle:
+                                    const TextStyle(color: Colors.white54),
+                                filled: true,
+                                fillColor: Colors.grey[700],
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                  borderSide: BorderSide.none,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                          IconButton(
+                            icon: const Icon(Icons.send, color: Colors.yellow),
+                            onPressed: () {},
+                          ),
+                        ],
                       ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.send, color: Colors.yellow),
-                      onPressed: () {},
-                    ),
-                  ],
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.key, color: Colors.white),
+                            onPressed: () {
+                              // Implement the function to select "Everyone"
+                              setState(() {
+                                selectedUser =
+                                    users.firstWhere((user) => user.id == -1);
+                                currentIndex = 0;
+                              });
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.camera_alt,
+                                color: Colors.white),
+                            onPressed: () {
+                              // Implement the function to connect to the phone camera
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.share, color: Colors.white),
+                            onPressed: () {
+                              // Implement the share function
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
             ],
           ),
         ],
