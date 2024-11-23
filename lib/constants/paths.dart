@@ -1,0 +1,1 @@
+const mobileLogo = 'assets/images/mobile-logo.png';

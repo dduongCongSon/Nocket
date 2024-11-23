@@ -63,21 +63,16 @@ class AuthMethods {
       final response = userLoginResponse;
 
       if ("hoang@" == email && "123" == password) {
-        // Parse response into UserLoginResponse object
-        UserLoginResponse userLoginResponse = UserLoginResponse.fromJson(response as Map<String, dynamic>);
+        // Use raw object data directly, no need to call fromJson
+        UserLoginResponse user = userLoginResponse;
 
         // Save tokens to SharedPreferences
         await _authService.saveTokens(userLoginResponse.token, userLoginResponse.refreshToken);
 
-        return userLoginResponse; // Return the UserLoginResponse object
+        return user; // Return the UserLoginResponse object directly
       } else {
-        // String errorMessage = response.data['message'] ?? "Login failed";
-        // if (kDebugMode) {
-        //   print("Error when logging in: $errorMessage");
-        //   print("Status code: ${response.statusCode}");
-        //   print("Response data: ${response.data}");
-        // }
-        // return null; // Return null on failure
+        // Handle login failure
+        return null;
       }
 
     } catch (e) {

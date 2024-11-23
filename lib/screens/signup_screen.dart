@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:locket/constants/paths.dart';
 import 'package:locket/resources/auth_methods.dart';
 import 'package:locket/responsive/mobile_screen_layout.dart';
 import 'package:locket/responsive/responsive_layout.dart';
@@ -81,6 +82,7 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: mobileBackGroundColorDark,
       drawer: const AppDrawer(),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -94,11 +96,8 @@ class _SignupScreenState extends State<SignupScreen> {
                 flex: 2,
                 child: Container(),
               ),
-              SvgPicture.asset(
-                'assets/images/ic_auctionkoi.svg',
-                height: 75,
-              ),
-              const SizedBox(
+              Image.asset(
+                mobileLogo,
                 height: 64,
               ),
               const SizedBox(
@@ -147,11 +146,16 @@ class _SignupScreenState extends State<SignupScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(4)),
                     ),
-                    color: blueColor,
+                    color: primaryColor,
                   ),
                   child: !_isLoading
                       ? const Text(
                           'Sign up',
+                          style: TextStyle(
+                            color: mobileBackGroundColorDark,
+                            backgroundColor: primaryColor,
+                            fontWeight: FontWeight.bold,
+                          ),
                         )
                       : const CircularProgressIndicator(
                           color: primaryColor,
@@ -161,10 +165,6 @@ class _SignupScreenState extends State<SignupScreen> {
               const SizedBox(
                 height: 12,
               ),
-              Flexible(
-                flex: 2,
-                child: Container(),
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -172,6 +172,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: const Text(
                       'Already have an account?',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                   GestureDetector(
@@ -185,12 +188,16 @@ class _SignupScreenState extends State<SignupScreen> {
                       child: const Text(
                         ' Login.',
                         style: TextStyle(
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(
+                height: 24,
               ),
             ],
           ),

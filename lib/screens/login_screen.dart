@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:locket/constants/paths.dart';
+import 'package:locket/constants/placeholders.dart';
 import 'package:locket/providers/user_provider.dart';
 import 'package:locket/screens/koi_list_screen.dart';
 import 'package:locket/screens/signup_screen.dart';
@@ -61,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff121212),
+      backgroundColor: mobileBackGroundColorDark,
       drawer: const AppDrawer(),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -83,41 +84,71 @@ class _LoginScreenState extends State<LoginScreen> {
                 // Center content vertically
                 children: [
                   Image.asset(
-                    'assets/images/mobile-logo.png',
+                    mobileLogo,
                     height: 64,
                   ),
                   const SizedBox(height: 64),
-                  TextFieldInput(
-                    hintText: 'Enter your email',
-                    textInputType: TextInputType.emailAddress,
-                    textEditingController: _emailController,
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16.0), // Add margin here
+                    child: TextFieldInput(
+                      hintText: emailPlaceholder,
+                      textInputType: TextInputType.emailAddress,
+                      textEditingController: _emailController,
+                    ),
                   ),
                   const SizedBox(height: 24),
-                  TextFieldInput(
-                    hintText: 'Enter your password',
-                    textInputType: TextInputType.text,
-                    textEditingController: _passwordController,
-                    isPass: true,
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16.0), // Add margin here
+                    child: TextFieldInput(
+                      hintText: passwordPlaceholder,
+                      textInputType: TextInputType.text,
+                      textEditingController: _passwordController,
+                      isPass: true,
+                    ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 15),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16.0), // Add margin here
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const SignupScreen(),
+                            ),
+                          ),
+                          child: const Text(
+                            forgotPassword,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                   InkWell(
                     onTap: loginUser,
                     child: Container(
                       width: double.infinity,
                       alignment: Alignment.center,
+                      margin: const EdgeInsets.symmetric(horizontal: 16.0), // Add margin here
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: const ShapeDecoration(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(4)),
                         ),
-                        color: Color(0xffeef2cf),
+                        color: primaryColor,
                       ),
                       child: !_isLoading
                           ? const Text(
-                              'Log In',
+                              login,
                               style: TextStyle(
-                                color: Color(0xff121212),
-                                backgroundColor: Color(0xffeef2cf),
+                                color: mobileBackGroundColorDark,
+                                backgroundColor: primaryColor,
                                 fontWeight: FontWeight.bold,
                               ),
                             )
@@ -130,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('Don\'t have an account?',
+                      const Text(notHaveAnAccount,
                           style: TextStyle(
                             color: Colors.white,
                           )),
@@ -141,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         child: const Text(
-                          ' Sign Up.',
+                          signUpHere,
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
