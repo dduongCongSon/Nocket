@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
               );
             }
 
-            return const HomeScreen();//starting screen
+            return const LoginScreen();//starting screen
           },
         ),
       ),

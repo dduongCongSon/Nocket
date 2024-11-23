@@ -4,7 +4,7 @@ import 'package:locket/utils/colors.dart';
 import 'package:locket/utils/global_variable.dart';
 
 class MobileScreenLayout extends StatefulWidget {
-  const MobileScreenLayout({Key? key}) : super(key: key);
+  const MobileScreenLayout({super.key});
 
   @override
   State<MobileScreenLayout> createState() => _MobileScreenLayoutState();

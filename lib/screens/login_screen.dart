@@ -13,7 +13,7 @@ import 'package:locket/widgets/text_field_input.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -46,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = false;
     });
 
-    if (Provider.of<UserProvider>(context, listen: false).user != null) {
+    if (Provider.of<UserProvider>(context, listen: false).userLoginResponse != null) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const HomeScreen()),

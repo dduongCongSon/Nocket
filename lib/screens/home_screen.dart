@@ -1,146 +1,35 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:locket/data.dart';
-import 'package:locket/models/user.dart';
+import 'package:locket/models/member.dart';
+import 'package:locket/providers/user_provider.dart';
+import 'package:locket/utils/auth_utils.dart';
+import 'package:locket/utils/camera_utils.dart';
 import 'package:locket/utils/colors.dart';
+import 'package:locket/utils/date_time.dart';
+import 'package:locket/widgets/everyone_post_grid.dart';
+import 'package:locket/widgets/my_post_grid.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late User selectedUser;
-  List<User> users = [];
+  late Member selectedMember;
+  List<Member> userList = [];
   int currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    User everyoneUser = User(
-        id: -1,
-        firstName: '',
-        lastName: '',
-        nickname: 'Everyone',
-        email: '',
-        address: '',
-        password: '',
-        isActive: false,
-        dateOfBirth: '',
-        avatarUrl: null,
-        roleName: '',
-        posts: []);
-    users = [everyoneUser, hoang, son];
-    selectedUser = users.first;
-  }
-
-  Widget buildGridView() {
-    final allPosts = users
-        .where((user) => user.id != -1)
-        .expand((user) => user.posts)
-        .toList();
-
-    return AnimatedOpacity(
-      opacity: 1.0,
-      duration: const Duration(milliseconds: 300),
-      child: GridView.builder(
-        padding: const EdgeInsets.all(10),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-        ),
-        itemCount: allPosts.length,
-        itemBuilder: (context, index) {
-          return Hero(
-            tag: 'image_${allPosts[index].image}',
-            child: Material(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Container(
-                  color: mobileBackGroundColorDark,
-                  // Set the background color to black
-                  child: Image.network(
-                    allPosts[index].image,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget buildPageView() {
-    return AnimatedOpacity(
-      opacity: 1.0,
-      duration: const Duration(milliseconds: 300),
-      child: Stack(
-        children: [
-          AspectRatio(
-            aspectRatio: 1,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: PageView.builder(
-                scrollDirection: Axis.vertical,
-                onPageChanged: (index) {
-                  setState(() {
-                    currentIndex = index;
-                  });
-                },
-                itemCount: selectedUser.posts.length,
-                itemBuilder: (context, index) {
-                  return Hero(
-                    tag: 'image_${selectedUser.posts[index].image}',
-                    child: FractionallySizedBox(
-                      heightFactor: 0.75,
-                      // Set the height to 75% of the original size
-                      child: Image.network(
-                        selectedUser.posts[index].image,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-          if (selectedUser.posts.isNotEmpty)
-            Positioned(
-              bottom: 10,
-              left: 0,
-              right: 0,
-              child: AnimatedOpacity(
-                opacity: 1.0,
-                duration: const Duration(milliseconds: 300),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      selectedUser.posts[currentIndex].title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        shadows: [
-                          Shadow(
-                            offset: Offset(0, 1),
-                            blurRadius: 3.0,
-                            color: Color.fromARGB(255, 0, 0, 0),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
+    selectedMember = Provider.of<UserProvider>(context, listen: false).userLoginResponse!.toMember();
+    Member everyone = everyoneData;
+    userList = [everyone, hoang, son];
   }
 
   @override
@@ -167,48 +56,86 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CircleAvatar(
-                      backgroundImage: selectedUser.avatarUrl != null
-                          ? NetworkImage(selectedUser.avatarUrl!)
-                          : null,
-                      child: selectedUser.avatarUrl == null
-                          ? const Icon(Icons.account_circle,
-                              color: Colors.white)
-                          : null,
-                    ),
-                    DropdownButton<User>(
-                      value: selectedUser,
-                      items: users.map((User user) {
-                        return DropdownMenuItem<User>(
-                          value: user,
+                    PopupMenuButton<String>(
+                      offset: const Offset(0, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: CircleAvatar(
+                        backgroundImage: selectedMember.avatarUrl != null
+                            ? NetworkImage(selectedMember.avatarUrl!)
+                            : null,
+                        child: selectedMember.avatarUrl == null
+                            ? const Icon(Icons.account_circle, color: Colors.white)
+                            : null,
+                      ),
+                      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                        const PopupMenuItem<String>(
+                          value: 'profile',
                           child: Row(
                             children: [
-                              if (user.avatarUrl != null)
-                                CircleAvatar(
-                                  backgroundImage: user.avatarUrl != null
-                                      ? NetworkImage(user.avatarUrl!)
-                                      : null,
-                                ),
-                              const SizedBox(width: 10),
-                              Text(
-                                user.nickname,
-                                style: const TextStyle(color: Colors.white),
-                              ),
+                              Icon(Icons.person, color: Colors.grey),
+                              SizedBox(width: 10),
+                              Text('Profile'),
                             ],
                           ),
-                        );
-                      }).toList(),
-                      onChanged: (User? newUser) {
-                        if (newUser != null) {
-                          setState(() {
-                            selectedUser = newUser;
-                            currentIndex = 0;
-                          });
+                        ),
+                        const PopupMenuDivider(),
+                        const PopupMenuItem<String>(
+                          value: 'logout',
+                          child: Row(
+                            children: [
+                              Icon(Icons.logout, color: Colors.red),
+                              SizedBox(width: 10),
+                              Text('Logout', style: TextStyle(color: Colors.red)),
+                            ],
+                          ),
+                        ),
+                      ],
+                      onSelected: (String value) async {
+                        if (value == 'logout') {
+                          // Show confirmation dialog
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                backgroundColor: Colors.grey[900],
+                                title: const Text(
+                                  'Confirm Logout',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                content: const Text(
+                                  'Are you sure you want to logout?',
+                                  style: TextStyle(color: Colors.white70),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text(
+                                      'Cancel',
+                                      style: TextStyle(color: Colors.white70),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context); // Close dialog
+                                      logout(context); // Perform logout
+                                    },
+                                    child: const Text(
+                                      'Logout',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        } else if (value == 'profile') {
+                          // Add profile navigation here if needed
                         }
                       },
-                      dropdownColor: Colors.grey[800],
                     ),
-                    const Icon(Icons.notifications, color: Colors.white),
+                    // Rest of your Row widgets...
                   ],
                 ),
               ),
@@ -228,27 +155,53 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       },
-                      child: selectedUser.id == -1
-                          ? buildGridView()
-                          : buildPageView(),
+                      child: selectedMember.id == -1
+                          ? EveryoneGridViewWidget(
+                              users: userList,
+                              mobileBackGroundColorDark:
+                                  mobileBackGroundColorDark,
+                            )
+                          : MyPostGrid(
+                              selectedUser: selectedMember,
+                              currentIndex: currentIndex,
+                              onPageChanged: (index) {
+                                setState(() {
+                                  currentIndex = index;
+                                });
+                              },
+                            ),
                     ),
                   ),
                 ),
               ),
-              if (selectedUser.id != -1)
+              if (selectedMember.id != -1)
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
-                  child: Text(
-                    selectedUser.firstName,
-                    key: ValueKey<String>(selectedUser.firstName),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        selectedMember.nickname,
+                        key: ValueKey<String>(selectedMember.nickname),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Text(
+                        formatDateTime(selectedMember.createdAt!),  // Assuming createdAt is not null
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  )
                 ),
-              if (selectedUser.id != -1)
+              if (selectedMember.id != -1)
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   margin: const EdgeInsets.only(bottom: 16),
@@ -287,18 +240,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             onPressed: () {
                               // Implement the function to select "Everyone"
                               setState(() {
-                                selectedUser =
-                                    users.firstWhere((user) => user.id == -1);
+                                selectedMember =
+                                    userList.firstWhere((user) => user.id == -1);
                                 currentIndex = 0;
                               });
                             },
                           ),
                           IconButton(
-                            icon: const Icon(Icons.camera_alt,
-                                color: Colors.white),
-                            onPressed: () {
-                              // Implement the function to connect to the phone camera
-                            },
+                            icon: const Icon(Icons.camera_alt, color: Colors.white),
+                            onPressed: () => navigateToCamera(context),
                           ),
                           IconButton(
                             icon: const Icon(Icons.share, color: Colors.white),

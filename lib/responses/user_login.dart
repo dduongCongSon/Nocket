@@ -1,7 +1,9 @@
+import 'package:locket/models/member.dart';
+
 class UserLoginResponse {
   final String tokenType;
   final int id;
-  final String username;
+  final Member member;
   final List<String> roles;
   final String message;
   final String token;
@@ -10,7 +12,7 @@ class UserLoginResponse {
   UserLoginResponse({
     required this.tokenType,
     required this.id,
-    required this.username,
+    required this.member,
     required this.roles,
     required this.message,
     required this.token,
@@ -21,11 +23,16 @@ class UserLoginResponse {
     return UserLoginResponse(
       tokenType: json['tokenType'],
       id: json['id'],
-      username: json['username'],
+      member: Member.fromJson(json['member']),
       roles: List<String>.from(json['roles']),
       message: json['message'],
       token: json['token'],
       refreshToken: json['refresh_token'],
     );
+  }
+
+  //convert UserLoginResponse to Member
+  Member toMember() {
+    return member; // Just return the member since it's already a Member object
   }
 }

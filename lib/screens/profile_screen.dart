@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:locket/constants/endpoints.dart';
-import 'package:locket/models/user_profile.dart';
+import 'package:locket/models/member_profile.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // For clearing stored session tokens
 
 class ProfileScreen extends StatefulWidget {
   final int uid; // User ID passed from previous screen
-  const ProfileScreen({Key? key, required this.uid}) : super(key: key);
+  const ProfileScreen({super.key, required this.uid});
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();

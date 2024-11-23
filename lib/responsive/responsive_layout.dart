@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:locket/utils/global_variable.dart';
-import 'package:provider/provider.dart';
 
 class ResponsiveLayout extends StatefulWidget {
   final Widget mobileScreenLayout;

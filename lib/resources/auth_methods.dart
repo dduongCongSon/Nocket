@@ -1,17 +1,14 @@
 import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:locket/constants/endpoints.dart';
 import 'package:locket/data.dart';
+import 'package:locket/models/member.dart';
 import 'package:locket/responses/user_login.dart';
 import 'package:locket/services/auth_service.dart';
 
 class AuthMethods {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final Dio _dio = Dio(); // Create a Dio instance
   final AuthService _authService = AuthService();
+  List<Member> users = [hoang, son];
 
   // Logging in user via HTTP request
   Future<UserLoginResponse?> loginUser({
@@ -20,56 +17,42 @@ class AuthMethods {
   }) async {
     try {
       if (email.isEmpty || password.isEmpty) {
-        return null; // Return null if fields are empty
+        return null;
       }
 
-      if (kDebugMode) {
-        print("Logging in with email: $email and password: $password");
-      }
+      final user = users.firstWhere(
+            (user) => user.email == email && user.password == password,
+        orElse: () => Member(
+          id: 0,
+          firstName: 'Default',
+          lastName: 'User',
+          nickname: 'default',
+          phoneNumber: null,
+          email: 'default@example.com',
+          address: 'Unknown',
+          password: '',
+          isActive: false,
+          statusName: 'UNKNOWN',
+          dateOfBirth: '2000-01-01',
+          avatarUrl: '',
+          roleName: 'ROLE_UNKNOWN',
+          posts: [],
+        ),
+      );
 
-      // final response = await _dio.post(
-      //   loginEndpointMock,
-      //   data: {
-      //     'email': email,
-      //     'password': password,
-      //   },
-      //   options: Options(
-      //     headers: {
-      //       'Content-Type': 'application/json; charset=UTF-8',
-      //     },
-      //     validateStatus: (status) => status! < 500,
-      //   ),
-      // );
-
-
-      // if (response.statusCode == 200) {
-      //   // Parse response into UserLoginResponse object
-      //   UserLoginResponse userLoginResponse = UserLoginResponse.fromJson(response.data);
-      //
-      //   // Save tokens to SharedPreferences
-      //   await _authService.saveTokens(userLoginResponse.token, userLoginResponse.refreshToken);
-      //
-      //   return userLoginResponse; // Return the UserLoginResponse object
-      // } else {
-      //   String errorMessage = response.data['message'] ?? "Login failed";
-      //   if (kDebugMode) {
-      //     print("Error when logging in: $errorMessage");
-      //     print("Status code: ${response.statusCode}");
-      //     print("Response data: ${response.data}");
-      //   }
-      //   return null; // Return null on failure
-      // }
-
-      final response = userLoginResponse;
-
-      if ("hoang@" == email && "123" == password) {
+      if (user.id != 0) {
         // Use raw object data directly, no need to call fromJson
-        UserLoginResponse user = userLoginResponse;
+        UserLoginResponse userResponse = hoangLoginResponse;
+        if(user.email == 'giang@'){
+          userResponse = hoangLoginResponse;
+        }else if(user.email == 'son@'){
+          userResponse = sonLoginResponse;
+        }
 
         // Save tokens to SharedPreferences
-        await _authService.saveTokens(userLoginResponse.token, userLoginResponse.refreshToken);
+        await _authService.saveTokens(hoangLoginResponse.token, hoangLoginResponse.refreshToken);
 
-        return user; // Return the UserLoginResponse object directly
+        return userResponse; // Return the UserLoginResponse object directly
       } else {
         // Handle login failure
         return null;

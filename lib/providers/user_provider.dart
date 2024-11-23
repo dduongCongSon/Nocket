@@ -3,20 +3,20 @@ import 'package:locket/resources/auth_methods.dart';
 import 'package:locket/responses/user_login.dart';
 
 class UserProvider with ChangeNotifier {
-  UserLoginResponse? _user;
+  UserLoginResponse? _userLoginResponse;
 
-  UserLoginResponse? get user => _user; // Getter for the user object
+  UserLoginResponse? get userLoginResponse => _userLoginResponse; // Getter for the user object
 
-  set user(UserLoginResponse? newUser) {
-    _user = newUser;
+  set userLoginResponse(UserLoginResponse? newUser) {
+    _userLoginResponse = newUser;
     notifyListeners(); // Notify listeners about the change
   }
 
   Future<void> loginUser(BuildContext context, String email, String password) async {
     AuthMethods authMethods = AuthMethods();
-    _user = await authMethods.loginUser(email: email, password: password); // Store the entire UserLoginResponse object
+    _userLoginResponse = await authMethods.loginUser(email: email, password: password); // Store the entire UserLoginResponse object
 
-    if (_user != null) {
+    if (_userLoginResponse != null) {
       notifyListeners(); // Notify listeners about the change
     } else {
       // Handle login failure (you might want to throw an error or show a message)
@@ -24,14 +24,8 @@ class UserProvider with ChangeNotifier {
   }
 
   void logout() {
-    _user = null; // Clear the user on logout
+    _userLoginResponse = null; // Clear the user on logout
     notifyListeners(); // Notify listeners about the change
   }
 
-  // Future<void> refreshUser() async {
-  //   AuthMethods authMethods = AuthMethods();
-  //   User user = await authMethods.getUserDetails();
-  //   _user = user;
-  //   notifyListeners();
-  // }
 }

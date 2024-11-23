@@ -1,14 +1,29 @@
 import 'package:locket/models/post.dart';
-import 'package:locket/models/user.dart';
+import 'package:locket/models/member.dart';
 import 'package:locket/responses/user_login.dart';
 
-User hoang = User(
+Member everyoneData = Member(
+    id: -1,
+    firstName: '',
+    lastName: '',
+    nickname: 'Everyone',
+    email: '',
+    address: '',
+    password: '',
+    isActive: false,
+    dateOfBirth: '',
+    avatarUrl: null,
+    roleName: '',
+    posts: []
+);
+
+Member hoang = Member(
   id: 1,
   firstName: 'Hoang',
   lastName: 'Luu',
   nickname: 'lch',
   phoneNumber: '0123456789',
-  email: 'giang@gmail.com',
+  email: 'giang@',
   address: 'Thanh Hoa, Vietnam',
   password: '123',
   isActive: true,
@@ -19,13 +34,13 @@ User hoang = User(
   posts: listPostHoang,
 );
 
-User son = User(
+Member son = Member(
   id: 2,
   firstName: 'Son',
   lastName: 'Duong Cong',
   nickname: 'myhanh',
   phoneNumber: '0123456789',
-  email: 'son@gmail.com',
+  email: 'son@',
   address: 'Quanh Binh, Vietnam',
   password: '123',
   isActive: true,
@@ -73,12 +88,24 @@ List<Post> listPostSon = List.of([
 ]);
 
 
-UserLoginResponse userLoginResponse = UserLoginResponse(
+UserLoginResponse hoangLoginResponse = UserLoginResponse(
     tokenType: 'Bearer',
     id: 27,
-    username: 'hoang@',
+    member: hoang,
     roles: ['ROLE_USER'],
     message: 'Login successfully',
     token:
         'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjI3LCJlbWFpbCI6ImlzYUBnbWFpbC5jb20iLCJzdWIiOiJpc2FAZ21haWwuY29tIiwiZXhwIjoxNzM0Mjc0OTg3fQ.1of70QCz2YV3lQYxQPyMk_168gTmalLCcR0rN0X73Qw',
-    refreshToken: 'b80352cb-d883-4c06-bbef-f15672fd79d3');
+    refreshToken: 'b80352cb-d883-4c06-bbef-f15672fd79d3'
+);
+
+UserLoginResponse sonLoginResponse = UserLoginResponse(
+    tokenType: 'Bearer',
+    id: 28,
+    member: son,
+    roles: ['ROLE_USER'],
+    message: 'Login successfully',
+    token:
+    'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjI3LCJlbWFpbCI6ImlzYUBnbWFpbC5jb20iLCJzdWIiOiJpc2FAZ21haWwuY29tIiwiZXhwIjoxNzM0Mjc0OTg3fQ.1of70QCz2YV3lQYxQPyMk_168gTmalLCcR0rN0X73Qw',
+    refreshToken: 'b80352cb-d883-4c06-bbef-f15672fd79d3'
+);

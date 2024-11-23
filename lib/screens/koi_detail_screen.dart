@@ -57,8 +57,8 @@ class _KoiDetailPageState extends State<KoiDetailPage> {
   Widget build(BuildContext context) {
     if (isLoading) {
       return Scaffold(
-        appBar: AppBar(title: Text('Koi Details')),
-        body: Center(child: CircularProgressIndicator()),
+        appBar: AppBar(title: const Text('Koi Details')),
+        body: const Center(child: CircularProgressIndicator()),
       );
     }
 

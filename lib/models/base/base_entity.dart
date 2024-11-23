@@ -1,5 +1,3 @@
-import 'package:intl/intl.dart';  // You might need this for formatting dates if required.
-
 // A base entity class with createdAt and updatedAt fields
 class BaseEntity {
   DateTime? createdAt;

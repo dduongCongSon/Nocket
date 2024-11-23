@@ -1,7 +1,8 @@
 import 'package:locket/models/base/base_entity.dart';
 import 'package:locket/models/post.dart';
+import 'package:locket/responses/user_login.dart';
 
-class User extends BaseEntity {
+class Member extends BaseEntity {
   final int id;
   final String firstName;
   final String lastName;
@@ -17,7 +18,7 @@ class User extends BaseEntity {
   final String roleName;
   final List<Post> posts; // List of posts related to this user
 
-  User({
+  Member({
     required this.id,
     required this.firstName,
     required this.lastName,
@@ -32,13 +33,23 @@ class User extends BaseEntity {
     this.avatarUrl,
     required this.roleName,
     this.posts = const [], // Initialize posts as an empty list by default
-  });
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }){
+    // If no createdAt is provided, initialize it with the current time
+    if (createdAt == null) {
+      onCreate();
+    } else {
+      this.createdAt = createdAt;
+      this.updatedAt = updatedAt ?? createdAt;
+    }
+  }
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  factory Member.fromJson(Map<String, dynamic> json) {
     var postsFromJson = json['posts'] as List<dynamic>? ?? [];
     List<Post> postList = postsFromJson.map((postJson) => Post.fromJson(postJson)).toList();
 
-    return User(
+    return Member(
       id: json['id'],
       firstName: json['first_name'],
       lastName: json['last_name'],
@@ -53,6 +64,8 @@ class User extends BaseEntity {
       avatarUrl: json['avatar_url'],
       roleName: json['role_name'],
       posts: postList,
+      createdAt: json.containsKey('created_at') ? DateTime.parse(json['created_at']) : null,
+      updatedAt: json.containsKey('updated_at') ? DateTime.parse(json['updated_at']) : null,
     );
   }
 }
