@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:locket/constants/paths.dart';
 import 'package:locket/constants/placeholders.dart';
 import 'package:locket/providers/user_provider.dart';
+import 'package:locket/screens/home_screen.dart';
 import 'package:locket/screens/koi_list_screen.dart';
 import 'package:locket/screens/signup_screen.dart';
 import 'package:locket/utils/colors.dart';
@@ -48,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (Provider.of<UserProvider>(context, listen: false).user != null) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const KoiListPage()),
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
     } else {
       if (context.mounted) {
