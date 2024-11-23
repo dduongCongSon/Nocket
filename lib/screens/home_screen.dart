@@ -11,18 +11,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   String selectedName = 'Hoang'; // Default name
-  late String selectedImageUrl; // Declare URL variable
+  late List<String> selectedImageUrls; // List of image URLs
   late String selectedMessage; // Declare message variable
   List<String> names = []; // List of names
+  int currentIndex = 0; // Track current image index for PageView
 
   @override
   void initState() {
     super.initState();
-    // Initialize names, selectedImageUrl, and selectedMessage from imageUrls
+    // Initialize names, selectedImageUrls, and selectedMessage
     names = imageUrls.keys.toList(); // List of names
-    selectedImageUrl = imageUrls[selectedName]!; // Corresponding URL
+    selectedImageUrls = imageUrls[selectedName]!; // List of corresponding URLs
     selectedMessage = messages[selectedName]!; // Corresponding message
   }
 
@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
                 child: Container(
-                  color: Colors.black.withValues(),
+                  color: Colors.black.withOpacity(0.3),
                 ),
               ),
             ),
@@ -60,8 +60,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       onChanged: (String? newValue) {
                         setState(() {
                           selectedName = newValue!;
-                          selectedImageUrl = imageUrls[selectedName]!; // Update corresponding URL
+                          selectedImageUrls = imageUrls[selectedName]!; // Update list of URLs
                           selectedMessage = messages[selectedName]!; // Update corresponding message
+                          currentIndex = 0; // Reset index when switching users
                         });
                       },
                       dropdownColor: Colors.grey[800],
@@ -80,15 +81,26 @@ class _HomeScreenState extends State<HomeScreen> {
                           aspectRatio: 1,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
-                            child: Image.network(
-                              selectedImageUrl, // Display corresponding URL
-                              fit: BoxFit.cover,
+                            child: PageView.builder(
+                              scrollDirection: Axis.vertical,
+                              onPageChanged: (index) {
+                                setState(() {
+                                  currentIndex = index; // Update the index on page change
+                                });
+                              },
+                              itemCount: selectedImageUrls.length, // Number of images
+                              itemBuilder: (context, index) {
+                                return Image.network(
+                                  selectedImageUrls[index], // Display corresponding image URL
+                                  fit: BoxFit.cover,
+                                );
+                              },
                             ),
                           ),
                         ),
                         const SizedBox(height: 10),
                         Positioned(
-                          bottom: 10, // Margin at the bottom
+                          bottom: 10,
                           left: 0,
                           right: 0,
                           child: Row(
@@ -98,7 +110,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 selectedMessage, // Display corresponding message
                                 style: const TextStyle(color: Colors.white, fontSize: 18),
                               ),
-
                             ],
                           ),
                         ),

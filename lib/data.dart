@@ -2,12 +2,21 @@ import 'package:locket/models/post.dart';
 import 'package:locket/models/user.dart';
 import 'package:locket/responses/user_login.dart';
 
-const Map<String, String> imageUrls = {
-  'Giang': 'https://images.unsplash.com/photo-1719937051230-8798ae2ebe86?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  'SonC': 'https://images.unsplash.com/photo-1726250864867-ad1dabb63c58?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  'Hoang': 'https://images.unsplash.com/photo-1725055425170-474e60968d3e?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  'MAH': 'https://images.unsplash.com/photo-1693087654826-f663e7cba602?q=80&w=2128&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-
+const Map<String, List<String>> imageUrls = {
+  'Giang': [
+    'https://images.unsplash.com/photo-1719937051230-8798ae2ebe86?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  ],
+  'SonC': [
+    'https://images.unsplash.com/photo-1726250864867-ad1dabb63c58?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  ],
+  'Hoang': [
+    'https://images.unsplash.com/photo-1685716851721-7e1419f2db18?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    'https://images.unsplash.com/photo-1725055425170-474e60968d3e?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    'https://images.unsplash.com/photo-1710988084343-03c28f267b7a?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  ],
+  'MAH': [
+    'https://images.unsplash.com/photo-1693087654826-f663e7cba602?q=80&w=2128&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  ],
 };
 
 Map<String, String> messages = {
@@ -19,21 +28,21 @@ Map<String, String> messages = {
   // Add more messages for other names as needed
 };
 
-User giang = User(
-  id: 1,
-  firstName: 'Giang',
-  lastName: 'Nguyen',
-  phoneNumber: '0123456789',
-  email: 'giang@gmail.com',
-  address: 'Nghe An, Vietnam',
-  password: '123',
-  isActive: true,
-  statusName: 'VERIFIED',
-  dateOfBirth: '2004-01-01',
-  avatarUrl: imageUrls['Giang'],
-  roleName: 'USER',
-  posts: List<Post>.empty(),
-);
+// User giang = User(
+//   id: 1,
+//   firstName: 'Giang',
+//   lastName: 'Nguyen',
+//   phoneNumber: '0123456789',
+//   email: 'giang@gmail.com',
+//   address: 'Nghe An, Vietnam',
+//   password: '123',
+//   isActive: true,
+//   statusName: 'VERIFIED',
+//   dateOfBirth: '2004-01-01',
+//   avatarUrl: imageUrls['Giang'],
+//   roleName: 'USER',
+//   posts: imageUrls['Giang'],
+// );
 
 Post post = Post(
     userId: 1,

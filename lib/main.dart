@@ -6,6 +6,7 @@ import 'package:locket/core/provider_setup.dart';
 import 'package:locket/responsive/mobile_screen_layout.dart';
 import 'package:locket/responsive/responsive_layout.dart';
 import 'package:locket/responsive/web_screen_layout.dart';
+import 'package:locket/screens/home_screen.dart';
 import 'package:locket/screens/login_screen.dart';
 import 'package:locket/utils/colors.dart';
 import 'package:provider/provider.dart';
@@ -73,7 +74,7 @@ class MyApp extends StatelessWidget {
               );
             }
 
-            return const LoginScreen();//starting screen
+            return const HomeScreen();//starting screen
           },
         ),
       ),
