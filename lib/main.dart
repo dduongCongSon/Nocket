@@ -2,18 +2,28 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:locket/core/provider_setup.dart';
-import 'package:locket/responsive/mobile_screen_layout.dart';
-import 'package:locket/responsive/responsive_layout.dart';
-import 'package:locket/responsive/web_screen_layout.dart';
-import 'package:locket/screens/home_screen.dart';
-import 'package:locket/screens/login_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:locket/configs/provider_setup.dart';
+import 'package:locket/features/auth/login_screen.dart';
+import 'package:locket/screens/mobile_screen_layout.dart';
+import 'package:locket/screens/responsive_layout.dart';
+import 'package:locket/screens/web_screen_layout.dart';
 import 'package:locket/utils/colors.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    await dotenv.load(fileName: ".env"); // Load environment variables
+    if (kDebugMode) {
+      print('Loaded .env file');
+      print('USE_EMULATOR: ${dotenv.env['USE_EMULATOR']}');
+    }
+  } catch (e) {
+    throw Exception('Error loading .env file: $e'); // Print error if any
+  }
 
   // initialise app based on platform- web or mobile
   if (kIsWeb) {

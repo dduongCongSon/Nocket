@@ -1,4 +1,4 @@
-import 'package:locket/models/member.dart';
+import 'package:locket/features/users/member.dart';
 
 class UserLoginResponse {
   final String tokenType;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:locket/models/member.dart';
+import 'package:locket/features/users/member.dart';
 
 class EveryoneGridViewWidget extends StatelessWidget {
   final List<Member> users;

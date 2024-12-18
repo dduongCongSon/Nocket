@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:locket/data.dart';
-import 'package:locket/models/member.dart';
-import 'package:locket/responses/user_login.dart';
-import 'package:locket/services/auth_service.dart';
+import 'package:locket/features/users/data.dart';
+import 'package:locket/features/users/member.dart';
+import 'package:locket/features/users/user_login.dart';
+import 'package:locket/features/auth/auth_service.dart';
 
 class AuthMethods {
   final Dio _dio = Dio(); // Create a Dio instance

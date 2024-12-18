@@ -1,6 +1,6 @@
-import 'package:locket/models/base/base_entity.dart';
-import 'package:locket/models/post.dart';
-import 'package:locket/responses/user_login.dart';
+import 'package:locket/base/base_entity.dart';
+import 'package:locket/features/posts/post.dart';
+import 'package:locket/features/users/user_login.dart';
 
 class Member extends BaseEntity {
   final int id;

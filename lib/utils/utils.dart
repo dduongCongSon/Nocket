@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 
 // for picking up image from gallery
@@ -11,7 +15,8 @@ pickImage(ImageSource source) async {
 }
 
 // for displaying snackbars
-ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackBar(BuildContext context, String text) {
+ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackBar(
+    BuildContext context, String text) {
   return ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(
@@ -176,7 +181,8 @@ void showFullScreenErrorWithOpacity(BuildContext context, String text) {
   );
 }
 
-void showFullScreenErrorWithTitle(BuildContext context, {required String title, required String message}) {
+void showFullScreenErrorWithTitle(BuildContext context,
+    {required String title, required String message}) {
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -223,7 +229,8 @@ void showFullScreenErrorWithTitle(BuildContext context, {required String title, 
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
-                    padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 50, vertical: 15),
                   ),
                   child: const Text('OK', style: TextStyle(fontSize: 18)),
                   onPressed: () {
@@ -237,4 +244,29 @@ void showFullScreenErrorWithTitle(BuildContext context, {required String title, 
       );
     },
   );
+}
+
+String? getBaseUrl() {
+  bool useEmulator = dotenv.env['USE_EMULATOR'] == 'true';
+
+  if (kDebugMode && useEmulator) {
+    if (Platform.isAndroid) {
+      return 'http://10.0.2.2:8080'; // Android emulator
+    } else if (Platform.isIOS) {
+      return 'http://localhost:8080'; // iOS simulator
+    }
+  }
+
+  String? physicalDeviceIP;
+  try {
+    physicalDeviceIP = dotenv.env['BASE_URL'];
+    if (physicalDeviceIP == null) {
+      throw Exception('BASE_URL not found in .env file');
+    }
+  } catch (e) {
+    if (kDebugMode) {
+      print(e);
+    }
+  }
+  return physicalDeviceIP;
 }

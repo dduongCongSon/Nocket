@@ -1,4 +1,4 @@
-import 'base/base_entity.dart';
+import 'package:locket/base/base_entity.dart';
 
 class Post extends BaseEntity {
   final int id;

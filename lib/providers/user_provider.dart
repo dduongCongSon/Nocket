@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:locket/resources/auth_methods.dart';
-import 'package:locket/responses/user_login.dart';
+import 'package:locket/utils/auth_methods.dart';
+import 'package:locket/features/users/user_login.dart';
 
 class UserProvider with ChangeNotifier {
   UserLoginResponse? _userLoginResponse;

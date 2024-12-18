@@ -1,6 +1,6 @@
-import 'package:locket/models/post.dart';
-import 'package:locket/models/member.dart';
-import 'package:locket/responses/user_login.dart';
+import 'package:locket/features/posts/post.dart';
+import 'package:locket/features/users/member.dart';
+import 'package:locket/features/users/user_login.dart';
 
 Member everyoneData = Member(
     id: -1,

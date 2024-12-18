@@ -4,7 +4,7 @@ import 'package:locket/utils/colors.dart';
 import 'package:locket/utils/global_variable.dart';
 
 class WebScreenLayout extends StatefulWidget {
-  const WebScreenLayout({Key? key}) : super(key: key);
+  const WebScreenLayout({super.key});
 
   @override
   State<WebScreenLayout> createState() => _WebScreenLayoutState();
@@ -47,7 +47,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
         backgroundColor: mobileBackgroundColor,
         centerTitle: false,
         title: SvgPicture.asset(
-          'assets/images/ic_auctionkoi.svg',
+          'assets/images/mobile-logo.png',
           color: primaryColor,
           height: 32,
         ),

@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:locket/constants/paths.dart';
 import 'package:locket/constants/placeholders.dart';
 import 'package:locket/providers/user_provider.dart';
-import 'package:locket/screens/home_screen.dart';
-import 'package:locket/screens/koi_list_screen.dart';
-import 'package:locket/screens/signup_screen.dart';
+import 'package:locket/features/auth/home_screen.dart';
+import 'package:locket/features/auth/signup_screen.dart';
 import 'package:locket/utils/colors.dart';
 import 'package:locket/utils/global_variable.dart';
 import 'package:locket/utils/utils.dart';
-import 'package:locket/widgets/app_drawer.dart';
-import 'package:locket/widgets/text_field_input.dart';
+import 'package:locket/common_widgets/app_drawer.dart';
+import 'package:locket/common_widgets/text_field_input.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {

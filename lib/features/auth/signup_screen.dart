@@ -2,16 +2,16 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:locket/common_widgets/app_drawer.dart';
+import 'package:locket/common_widgets/text_field_input.dart';
 import 'package:locket/constants/paths.dart';
-import 'package:locket/resources/auth_methods.dart';
-import 'package:locket/responsive/mobile_screen_layout.dart';
-import 'package:locket/responsive/responsive_layout.dart';
-import 'package:locket/responsive/web_screen_layout.dart';
-import 'package:locket/screens/login_screen.dart';
+import 'package:locket/features/auth/login_screen.dart';
+import 'package:locket/screens/mobile_screen_layout.dart';
+import 'package:locket/screens/responsive_layout.dart';
+import 'package:locket/screens/web_screen_layout.dart';
+import 'package:locket/utils/auth_methods.dart';
 import 'package:locket/utils/colors.dart';
 import 'package:locket/utils/utils.dart';
-import 'package:locket/widgets/app_drawer.dart';
-import 'package:locket/widgets/text_field_input.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);

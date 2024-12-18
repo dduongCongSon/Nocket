@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:locket/providers/user_provider.dart';
-import 'package:locket/services/auth_service.dart';
+import 'package:locket/features/auth/auth_service.dart';
 import 'package:provider/provider.dart';
 import 'package:dio/dio.dart';
 import 'package:provider/single_child_widget.dart';
