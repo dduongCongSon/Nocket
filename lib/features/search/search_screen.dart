@@ -2,7 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:locket/features/users/profile_screen.dart';
+import 'package:locket/screens/profile_screen.dart';
 import 'package:locket/utils/colors.dart';
 
 class SearchScreen extends StatefulWidget {

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:locket/providers/user_provider.dart';
-import 'package:locket/features/auth/home_screen.dart';
-import 'package:locket/features/auth/login_screen.dart';
-import 'package:locket/features/users/profile_screen.dart';
-import 'package:locket/features/auth/signup_screen.dart';
+import 'package:locket/screens/home_screen.dart';
+import 'package:locket/screens/login_screen.dart';
+import 'package:locket/screens/profile_screen.dart';
+import 'package:locket/screens/signup_screen.dart';
 import 'package:provider/provider.dart';
 
 class AppDrawer extends StatelessWidget {
